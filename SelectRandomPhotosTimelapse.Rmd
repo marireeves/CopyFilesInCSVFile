@@ -1,0 +1,54 @@
+---
+title: "CompileRandomPhotosTimelapse"
+author: "Mari K Reeves"
+date: "2022-09-06"
+output: word_document
+---
+This code takes a csv file from the photo review software, Timelapse, as an input to copy the photos that were in the random selection to another folder. 
+```{r setup, echo = T, include=T, root.dir = "D:/Bats/AguiguanStudy/Photos/"}
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+```{r global_options, echo=TRUE, message=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                     echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
+```{r Read in Packages, include=FALSE}
+pckg <- c("tidyverse","RColorBrewer", "ggplot2","tictoc", "knitr", "markdown", "rmarkdown")
+for(i in 1:length(pckg)){
+  if ((!pckg[i] %in% installed.packages())==T) {
+    install.packages(pckg[i], repos="http://cran.us.r-project.org",
+                     dependencies = T)
+    print(pckg[i])
+    do.call("library", list(pckg[i]))
+  }else{
+    print(pckg[i])
+    do.call("library", list(pckg[i]))
+  }
+}
+```
+
+
+```{r Clean Workspace and Set Directories, include=FALSE}
+rm(list = ls()) #'remove all past worksheet variables
+
+set.seed(333)
+basedir<-"D:/Bats/AguiguanStudy/Photos/"
+outdir<-"C:/Users/marireeves/Documents/Bats/Pictures/"
+
+#Take in the csv file of 150 random photos from timelapse
+random<-read.csv(paste0(basedir, "FindPics4ZendoRandom150.csv"))
+
+#make a list of randomly selected files
+randfiles<-paste0(basedir, random$RelativePath,"/", random$File)
+```
+
+```{r, pattern match to copy files in randlist to a new folder}
+
+file.copy(from = randfiles, to = paste0(outdir, random$RelativePath, random$File))
+
+```
+
